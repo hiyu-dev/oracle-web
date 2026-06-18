@@ -5,80 +5,341 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ORACLE — プレミアム西洋占星術鑑定</title>
 <link rel="stylesheet" href="/style.css">
+<style>
+  /* ── ヒーロー ── */
+  .hero {
+    text-align: center;
+    padding: 100px 24px 80px;
+    background: radial-gradient(ellipse at 50% 30%, #1e1540 0%, #0a0a14 65%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='1' fill='%23c9a84c' opacity='0.15'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 10px; letter-spacing: 6px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: clamp(32px, 6vw, 56px);
+    color: #f0e6c8; letter-spacing: 4px; line-height: 1.4;
+    margin-bottom: 24px;
+  }
+  .hero-title em { color: var(--gold); font-style: normal; }
+  .hero-desc {
+    font-size: 15px; color: #a89878; line-height: 2.0;
+    max-width: 520px; margin: 0 auto 48px;
+  }
+  .hero-cta {
+    display: inline-block; padding: 16px 48px;
+    background: linear-gradient(135deg, #b8922a, var(--gold));
+    color: #0a0a14; font-size: 14px; letter-spacing: 4px;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .hero-cta:hover { opacity: 0.85; color: #0a0a14; }
+  .hero-divider {
+    width: 160px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 60px auto 0;
+  }
+  .hero-trinity {
+    display: flex; gap: 48px; justify-content: center; margin-top: 48px; flex-wrap: wrap;
+  }
+  .hero-trinity-item { text-align: center; }
+  .hero-trinity-label { font-size: 9px; letter-spacing: 4px; color: var(--text-muted); }
+  .hero-trinity-value { font-size: 28px; color: var(--gold); margin-top: 6px; }
+
+  /* ── 特徴セクション ── */
+  .features {
+    padding: 80px 24px;
+    background: linear-gradient(180deg, #0a0a14 0%, #0d0d1e 100%);
+  }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px; margin-top: 40px;
+  }
+  .feature-item {
+    text-align: center; padding: 32px 20px;
+    border: 1px solid #1a1a2e;
+  }
+  .feature-icon { font-size: 28px; margin-bottom: 16px; }
+  .feature-title { font-size: 14px; color: #f0e6c8; letter-spacing: 2px; margin-bottom: 10px; }
+  .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.9; }
+
+  /* ── 鑑定内容 ── */
+  .contents {
+    padding: 80px 24px;
+    background: #0a0a14;
+    border-top: 1px solid #1a1a2e;
+  }
+  .contents-list {
+    margin-top: 40px; display: flex; flex-direction: column; gap: 0;
+  }
+  .content-item {
+    display: flex; align-items: flex-start; gap: 20px;
+    padding: 24px 0; border-bottom: 1px solid #1a1a2e;
+  }
+  .content-num {
+    font-size: 11px; color: var(--gold); letter-spacing: 2px;
+    min-width: 60px; padding-top: 2px;
+  }
+  .content-body {}
+  .content-title { font-size: 15px; color: #f0e6c8; letter-spacing: 1px; margin-bottom: 6px; }
+  .content-desc { font-size: 12px; color: var(--text-muted); line-height: 1.9; }
+  .content-badge {
+    display: inline-block; font-size: 9px; letter-spacing: 2px;
+    color: var(--gold); border: 1px solid #3a2a10; padding: 2px 8px;
+    margin-left: 10px; vertical-align: middle;
+  }
+
+  /* ── 区切り ── */
+  .section-center { text-align: center; }
+  .gold-line {
+    width: 50px; height: 1px; background: var(--gold);
+    margin: 16px auto 0; opacity: 0.5;
+  }
+
+  /* ── FAQ ── */
+  .faq { padding: 80px 24px; background: #0d0d1e; border-top: 1px solid #1a1a2e; }
+  .faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; }
+  .faq-item { padding: 24px 0; border-bottom: 1px solid #1a1a2e; }
+  .faq-q { font-size: 14px; color: #f0e6c8; margin-bottom: 10px; }
+  .faq-q::before { content: 'Q. '; color: var(--gold); }
+  .faq-a { font-size: 13px; color: var(--text-muted); line-height: 1.9; }
+  .faq-a::before { content: 'A. '; color: #6a5a4a; }
+
+  /* ── 注意書き ── */
+  .disclaimer {
+    padding: 40px 24px; text-align: center;
+    font-size: 11px; color: #4a3a2a; line-height: 1.9;
+    border-top: 1px solid #1a1a2e;
+  }
+
+  @media (max-width: 600px) {
+    .hero-trinity { gap: 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 
-<header>
-  <div class="logo-stars">✦ ✦ ✦</div>
-  <div class="logo-title">ORACLE</div>
-  <div class="logo-sub">PREMIUM ASTROLOGY READING</div>
-  <div class="header-divider"></div>
-</header>
-
-<div class="container">
-  <div class="form-block">
-    <div class="section-label">Birth Information</div>
-    <div class="section-title">出生情報を入力してください</div>
-
-    <form id="orderForm">
-
-      <!-- 生年月日 -->
-      <div class="form-group">
-        <label>生年月日</label>
-        <div class="form-row-3">
-          <input type="number" id="year"   placeholder="年（例: 1990）" min="1900" max="2010" required>
-          <input type="number" id="month"  placeholder="月（1〜12）"    min="1"    max="12"   required>
-          <input type="number" id="day"    placeholder="日（1〜31）"    min="1"    max="31"   required>
-        </div>
-      </div>
-
-      <!-- 出生時刻 -->
-      <div class="form-group">
-        <label>出生時刻（わかる場合）</label>
-        <div class="form-row">
-          <input type="number" id="hour"   placeholder="時（0〜23）" min="0" max="23">
-          <input type="number" id="minute" placeholder="分（0〜59）" min="0" max="59">
-        </div>
-        <p style="font-size:11px;color:#6a5a4a;margin-top:6px">わからない場合は空欄のまま（12:00として計算）</p>
-      </div>
-
-      <!-- 出生地 -->
-      <div class="form-group">
-        <label>出生地（都市名）</label>
-        <input type="text" id="placeName" placeholder="例：東京都、大阪府、札幌市" required>
-      </div>
-
-      <!-- プラン -->
-      <div class="form-group" style="margin-top:36px">
-        <label>鑑定プランを選択</label>
-        <div class="plan-grid">
-          <label class="plan-card selected" id="card-basic">
-            <input type="radio" name="plan" value="basic" checked>
-            <div class="plan-badge">Basic</div>
-            <div class="plan-name">基本鑑定</div>
-            <div class="plan-price">¥9,800<span> 税込</span></div>
-            <div class="plan-desc">2章構成<br>本質の性格・才能と使命</div>
-          </label>
-          <label class="plan-card" id="card-full">
-            <input type="radio" name="plan" value="full">
-            <div class="plan-badge">Full ✦ Premium</div>
-            <div class="plan-name">総合鑑定</div>
-            <div class="plan-price">¥29,800<span> 税込</span></div>
-            <div class="plan-desc">6章構成<br>性格・才能・恋愛・仕事<br>転換期・魂へのメッセージ</div>
-          </label>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-primary" id="submitBtn">
-        決済へ進む
-      </button>
-
-    </form>
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Premium Astrology Reading ✦</div>
+  <h1 class="hero-title">
+    あなたの星が語る、<br>
+    <em>生まれながらの物語</em>
+  </h1>
+  <p class="hero-desc">
+    生年月日・出生時刻・出生地から、本格的な西洋占星術ホロスコープを解読。<br>
+    太陽・月・上昇宮をはじめとする10天体の配置が、あなたの本質と使命を照らし出します。
+  </p>
+  <a href="#order" class="hero-cta">鑑定を申し込む</a>
+  <div class="hero-divider"></div>
+  <div class="hero-trinity">
+    <div class="hero-trinity-item">
+      <div class="hero-trinity-label">10天体</div>
+      <div class="hero-trinity-value">完全解読</div>
+    </div>
+    <div class="hero-trinity-item">
+      <div class="hero-trinity-label">生成時間</div>
+      <div class="hero-trinity-value">約3分</div>
+    </div>
+    <div class="hero-trinity-item">
+      <div class="hero-trinity-label">鑑定精度</div>
+      <div class="hero-trinity-value">高精度</div>
+    </div>
   </div>
+</section>
+
+<!-- 特徴 -->
+<section class="features">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-label">Features</div>
+      <div class="section-title" style="border:none;text-align:center">ORACLEが選ばれる理由</div>
+      <div class="gold-line"></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">✦</div>
+        <div class="feature-title">リアルタイム生成</div>
+        <div class="feature-desc">鑑定文が目の前で生成される体験。待つだけで、あなただけの言葉が紡がれます。</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">◈</div>
+        <div class="feature-title">高精度な天体計算</div>
+        <div class="feature-desc">VSOP87理論に基づく高精度アルゴリズムで10天体・12ハウス・アスペクトを算出。</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">❖</div>
+        <div class="feature-title">完全個別鑑定</div>
+        <div class="feature-desc">あなたの出生データを元に一から生成。同じ内容の鑑定書は存在しません。</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">◇</div>
+        <div class="feature-title">PDF保存可能</div>
+        <div class="feature-desc">鑑定結果はブラウザからPDFとして保存。手元に残して何度でも読み返せます。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 鑑定内容 -->
+<section class="contents">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-label">Contents</div>
+      <div class="section-title" style="border:none;text-align:center">鑑定書の内容</div>
+      <div class="gold-line"></div>
+    </div>
+    <div class="contents-list">
+      <div class="content-item">
+        <div class="content-num">Chapter 1</div>
+        <div class="content-body">
+          <div class="content-title">あなたの本質 — 太陽・月・上昇宮</div>
+          <div class="content-desc">三位一体の配置から読み解く、魂の気質・世界への見せ方・内なる感情の動き。</div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="content-num">Chapter 2</div>
+        <div class="content-body">
+          <div class="content-title">生まれながらの才能と魂の使命</div>
+          <div class="content-desc">MC・木星・第10ハウスが示す、この人生で輝くための天職と社会での役割。</div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="content-num">Chapter 3 <span class="content-badge">FULL</span></div>
+        <div class="content-body">
+          <div class="content-title">恋愛と魂の絆</div>
+          <div class="content-desc">金星・火星・第7ハウスが語る、愛の傾向と理想のパートナーシップの形。</div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="content-num">Chapter 4 <span class="content-badge">FULL</span></div>
+        <div class="content-body">
+          <div class="content-title">仕事・財運 — 物質世界での成功法則</div>
+          <div class="content-desc">土星・木星・第2ハウスが示す、財を引き寄せる働き方と成功の条件。</div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="content-num">Chapter 5 <span class="content-badge">FULL</span></div>
+        <div class="content-body">
+          <div class="content-title">人生の転換期 — 2026〜2028年</div>
+          <div class="content-desc">木星・土星のサイクルから読む、近未来に訪れるチャンスと変容の波。</div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="content-num">Chapter 6 <span class="content-badge">FULL</span></div>
+        <div class="content-body">
+          <div class="content-title">魂への手紙 — 統合メッセージ</div>
+          <div class="content-desc">全ての配置を統合した、あなたへの力強い締めくくりのメッセージ。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 申し込みフォーム -->
+<section id="order" style="padding: 80px 0; background: linear-gradient(180deg, #0d0d1e 0%, #0a0a14 100%); border-top: 1px solid #1a1a2e;">
+<div class="container">
+  <div class="section-center" style="margin-bottom: 50px;">
+    <div class="section-label">Order</div>
+    <div class="section-title" style="border:none;text-align:center">鑑定を申し込む</div>
+    <div class="gold-line"></div>
+  </div>
+
+  <form id="orderForm">
+    <div class="form-group">
+      <label>生年月日</label>
+      <div class="form-row-3">
+        <input type="number" id="year"   placeholder="年（例: 1990）" min="1900" max="2010" required>
+        <input type="number" id="month"  placeholder="月（1〜12）"    min="1"    max="12"   required>
+        <input type="number" id="day"    placeholder="日（1〜31）"    min="1"    max="31"   required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>出生時刻（わかる場合）</label>
+      <div class="form-row">
+        <input type="number" id="hour"   placeholder="時（0〜23）" min="0" max="23">
+        <input type="number" id="minute" placeholder="分（0〜59）" min="0" max="59">
+      </div>
+      <p style="font-size:11px;color:#6a5a4a;margin-top:6px">わからない場合は空欄のまま（12:00として計算）</p>
+    </div>
+    <div class="form-group">
+      <label>出生地（都市名）</label>
+      <input type="text" id="placeName" placeholder="例：東京都、大阪府、札幌市" required>
+    </div>
+    <div class="form-group" style="margin-top:36px">
+      <label>鑑定プランを選択</label>
+      <div class="plan-grid">
+        <label class="plan-card selected" id="card-basic">
+          <input type="radio" name="plan" value="basic" checked>
+          <div class="plan-badge">Basic</div>
+          <div class="plan-name">基本鑑定</div>
+          <div class="plan-price">¥9,800<span> 税込</span></div>
+          <div class="plan-desc">2章構成<br>本質の性格・才能と使命</div>
+        </label>
+        <label class="plan-card" id="card-full">
+          <input type="radio" name="plan" value="full">
+          <div class="plan-badge">Full ✦ Premium</div>
+          <div class="plan-name">総合鑑定</div>
+          <div class="plan-price">¥29,800<span> 税込</span></div>
+          <div class="plan-desc">6章構成<br>性格・才能・恋愛・仕事<br>転換期・魂へのメッセージ</div>
+        </label>
+      </div>
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">
+      決済へ進む
+    </button>
+  </form>
+</div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-label">FAQ</div>
+      <div class="section-title" style="border:none;text-align:center">よくある質問</div>
+      <div class="gold-line"></div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">出生時刻がわからなくても大丈夫ですか？</div>
+        <div class="faq-a">大丈夫です。時刻不明の場合は正午（12:00）として計算します。太陽・月・主要惑星の配置は時刻の影響を受けにくいため、充分な精度で鑑定できます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">鑑定結果はどのくらいで届きますか？</div>
+        <div class="faq-a">決済完了後、すぐに画面上でリアルタイム生成が始まります。基本鑑定で約2〜3分、総合鑑定で約5〜8分で完了します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">鑑定結果を保存できますか？</div>
+        <div class="faq-a">はい。鑑定完了後に「PDFとして保存する」ボタンが表示されます。ブラウザの印刷機能からPDFとして保存してください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">対応している出生地はどこですか？</div>
+        <div class="faq-a">現在は日本国内の主要都市（東京、大阪、名古屋、福岡、札幌など）に対応しています。都道府県名または市名でご入力ください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">返金はできますか？</div>
+        <div class="faq-a">デジタルコンテンツの性質上、鑑定生成開始後の返金はお受けできません。システムエラー等の問題が発生した場合はご連絡ください。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="disclaimer">
+  本サービスはエンターテインメント目的の占いサービスです。鑑定結果は人生の重要な決断の唯一の根拠としないようお願いします。<br>
+  © 2026 ORACLE / HIYU WEB
 </div>
 
 <script>
-// プランカード選択UI
 document.querySelectorAll('.plan-card').forEach(card => {
   card.addEventListener('click', () => {
     document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
@@ -86,7 +347,6 @@ document.querySelectorAll('.plan-card').forEach(card => {
   });
 });
 
-// 都市 → 緯度経度・タイムゾーン変換テーブル
 const CITIES = {
   '札幌': { lat: 43.0642, lon: 141.3469, tz: 9 },
   '仙台': { lat: 38.2688, lon: 140.8721, tz: 9 },
@@ -117,39 +377,29 @@ function findCity(name) {
 
 document.getElementById('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const placeName = document.getElementById('placeName').value.trim();
   const cityData  = findCity(placeName);
-
   if (!cityData) {
     alert(`「${placeName}」は対応していません。\n主要都市名（東京、大阪、名古屋 等）で入力してください。`);
     return;
   }
-
   const birth = {
-    year:      parseInt(document.getElementById('year').value),
-    month:     parseInt(document.getElementById('month').value),
-    day:       parseInt(document.getElementById('day').value),
-    hour:      parseInt(document.getElementById('hour').value)   || 12,
-    minute:    parseInt(document.getElementById('minute').value) || 0,
-    lat:       cityData.lat,
-    lon:       cityData.lon,
-    tz:        cityData.tz,
-    placeName,
+    year:   parseInt(document.getElementById('year').value),
+    month:  parseInt(document.getElementById('month').value),
+    day:    parseInt(document.getElementById('day').value),
+    hour:   parseInt(document.getElementById('hour').value)   || 12,
+    minute: parseInt(document.getElementById('minute').value) || 0,
+    lat: cityData.lat, lon: cityData.lon, tz: cityData.tz, placeName,
   };
-
   const plan = document.querySelector('input[name=plan]:checked').value;
-
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = '処理中...';
-
   const res = await fetch('/api/create-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ plan, birth }),
   });
-
   const data = await res.json();
   if (data.url) {
     window.location.href = data.url;
