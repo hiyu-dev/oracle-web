@@ -56,7 +56,7 @@ export default async function handler(req, res) {
 
     await generateChapter(chart, chapterIndex, plan, (text) => {
       send({ type: 'text', text });
-    }, birth.name || '');
+    }, birth);
 
     send({ type: 'chapter_end', index: chapterIndex });
 

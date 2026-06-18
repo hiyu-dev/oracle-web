@@ -336,6 +336,34 @@
       <label>出生地（都市名）</label>
       <input type="text" id="placeName" placeholder="例：東京都、大阪府、札幌市" required>
     </div>
+    <div class="form-group">
+      <label>性別（任意）</label>
+      <select id="gender">
+        <option value="">選択しない</option>
+        <option value="female">女性</option>
+        <option value="male">男性</option>
+        <option value="other">その他・回答しない</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>今一番気になっていること</label>
+      <select id="theme" required>
+        <option value="">選択してください</option>
+        <option value="仕事・キャリア">仕事・キャリア</option>
+        <option value="恋愛・パートナーシップ">恋愛・パートナーシップ</option>
+        <option value="お金・財運">お金・財運</option>
+        <option value="人生の方向性">人生の方向性</option>
+        <option value="人間関係">人間関係</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>今の状況や悩み（任意）</label>
+      <textarea id="concern" placeholder="例：転職を考えています。自分に向いている仕事が知りたいです。" rows="3" style="width:100%;padding:12px 16px;background:#111128;border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;resize:vertical;outline:none;border-radius:2px;line-height:1.8"></textarea>
+      <p style="font-size:11px;color:#6a5a4a;margin-top:6px">書いていただくと鑑定文に反映されます（200文字以内）</p>
+    </div>
+
     <div class="form-group" style="margin-top:36px">
       <label>鑑定プランを選択</label>
       <div class="plan-grid">
@@ -487,7 +515,10 @@ document.getElementById('orderForm').addEventListener('submit', async (e) => {
     hour:   parseInt(document.getElementById('hour').value)   || 12,
     minute: parseInt(document.getElementById('minute').value) || 0,
     lat: cityData.lat, lon: cityData.lon, tz: cityData.tz, placeName,
-    name: document.getElementById('name').value.trim(),
+    name:    document.getElementById('name').value.trim(),
+    gender:  document.getElementById('gender').value,
+    theme:   document.getElementById('theme').value,
+    concern: document.getElementById('concern').value.trim().slice(0, 200),
   };
   const plan = document.querySelector('input[name=plan]:checked').value;
   const btn = document.getElementById('submitBtn');
