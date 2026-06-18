@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORACLE — プレミアム西洋占星術鑑定</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo-stars">✦ ✦ ✦</div>
+  <div class="logo-title">ORACLE</div>
+  <div class="logo-sub">PREMIUM ASTROLOGY READING</div>
+  <div class="header-divider"></div>
+</header>
+
+<div class="container">
+  <div class="form-block">
+    <div class="section-label">Birth Information</div>
+    <div class="section-title">出生情報を入力してください</div>
+
+    <form id="orderForm">
+
+      <!-- 生年月日 -->
+      <div class="form-group">
+        <label>生年月日</label>
+        <div class="form-row-3">
+          <input type="number" id="year"   placeholder="年（例: 1990）" min="1900" max="2010" required>
+          <input type="number" id="month"  placeholder="月（1〜12）"    min="1"    max="12"   required>
+          <input type="number" id="day"    placeholder="日（1〜31）"    min="1"    max="31"   required>
+        </div>
+      </div>
+
+      <!-- 出生時刻 -->
+      <div class="form-group">
+        <label>出生時刻（わかる場合）</label>
+        <div class="form-row">
+          <input type="number" id="hour"   placeholder="時（0〜23）" min="0" max="23">
+          <input type="number" id="minute" placeholder="分（0〜59）" min="0" max="59">
+        </div>
+        <p style="font-size:11px;color:#6a5a4a;margin-top:6px">わからない場合は空欄のまま（12:00として計算）</p>
+      </div>
+
+      <!-- 出生地 -->
+      <div class="form-group">
+        <label>出生地（都市名）</label>
+        <input type="text" id="placeName" placeholder="例：東京都、大阪府、札幌市" required>
+      </div>
+
+      <!-- プラン -->
+      <div class="form-group" style="margin-top:36px">
+        <label>鑑定プランを選択</label>
+        <div class="plan-grid">
+          <label class="plan-card selected" id="card-basic">
+            <input type="radio" name="plan" value="basic" checked>
+            <div class="plan-badge">Basic</div>
+            <div class="plan-name">基本鑑定</div>
+            <div class="plan-price">¥9,800<span> 税込</span></div>
+            <div class="plan-desc">2章構成<br>本質の性格・才能と使命</div>
+          </label>
+          <label class="plan-card" id="card-full">
+            <input type="radio" name="plan" value="full">
+            <div class="plan-badge">Full ✦ Premium</div>
+            <div class="plan-name">総合鑑定</div>
+            <div class="plan-price">¥29,800<span> 税込</span></div>
+            <div class="plan-desc">6章構成<br>性格・才能・恋愛・仕事<br>転換期・魂へのメッセージ</div>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        決済へ進む
+      </button>
+
+    </form>
+  </div>
+</div>
+
+<script>
+// プランカード選択UI
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  });
+});
+
+// 都市 → 緯度経度・タイムゾーン変換テーブル
+const CITIES = {
+  '札幌': { lat: 43.0642, lon: 141.3469, tz: 9 },
+  '仙台': { lat: 38.2688, lon: 140.8721, tz: 9 },
+  '東京': { lat: 35.6895, lon: 139.6917, tz: 9 },
+  '横浜': { lat: 35.4437, lon: 139.6380, tz: 9 },
+  '川崎': { lat: 35.5308, lon: 139.7030, tz: 9 },
+  '埼玉': { lat: 35.8614, lon: 139.6455, tz: 9 },
+  '千葉': { lat: 35.6073, lon: 140.1063, tz: 9 },
+  '名古屋': { lat: 35.1815, lon: 136.9066, tz: 9 },
+  '京都': { lat: 35.0116, lon: 135.7681, tz: 9 },
+  '大阪': { lat: 34.6937, lon: 135.5022, tz: 9 },
+  '神戸': { lat: 34.6901, lon: 135.1956, tz: 9 },
+  '広島': { lat: 34.3853, lon: 132.4553, tz: 9 },
+  '福岡': { lat: 33.5904, lon: 130.4017, tz: 9 },
+  '那覇': { lat: 26.2124, lon: 127.6809, tz: 9 },
+  '札幌市': { lat: 43.0642, lon: 141.3469, tz: 9 },
+  '東京都': { lat: 35.6895, lon: 139.6917, tz: 9 },
+  '大阪府': { lat: 34.6937, lon: 135.5022, tz: 9 },
+  '北海道': { lat: 43.0642, lon: 141.3469, tz: 9 },
+};
+
+function findCity(name) {
+  for (const [key, val] of Object.entries(CITIES)) {
+    if (name.includes(key)) return val;
+  }
+  return null;
+}
+
+document.getElementById('orderForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const placeName = document.getElementById('placeName').value.trim();
+  const cityData  = findCity(placeName);
+
+  if (!cityData) {
+    alert(`「${placeName}」は対応していません。\n主要都市名（東京、大阪、名古屋 等）で入力してください。`);
+    return;
+  }
+
+  const birth = {
+    year:      parseInt(document.getElementById('year').value),
+    month:     parseInt(document.getElementById('month').value),
+    day:       parseInt(document.getElementById('day').value),
+    hour:      parseInt(document.getElementById('hour').value)   || 12,
+    minute:    parseInt(document.getElementById('minute').value) || 0,
+    lat:       cityData.lat,
+    lon:       cityData.lon,
+    tz:        cityData.tz,
+    placeName,
+  };
+
+  const plan = document.querySelector('input[name=plan]:checked').value;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '処理中...';
+
+  const res = await fetch('/api/create-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan, birth }),
+  });
+
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url;
+  } else {
+    alert('エラーが発生しました。もう一度お試しください。');
+    btn.disabled = false;
+    btn.textContent = '決済へ進む';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --bg: #0a0a14;
+  --bg2: #0d0d1e;
+  --text: #e8e0d0;
+  --text-muted: #9a8a6a;
+  --border: #2a2040;
+}
+
+body {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.9;
+}
+
+a { color: var(--gold); text-decoration: none; }
+
+/* ── ヘッダー ── */
+header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: radial-gradient(ellipse at 50% 0%, #1a1235 0%, var(--bg) 70%);
+}
+.logo-stars { font-size: 24px; letter-spacing: 8px; color: var(--gold); opacity: 0.7; margin-bottom: 12px; }
+.logo-title { font-size: 40px; letter-spacing: 10px; color: #f0e6c8; }
+.logo-sub { font-size: 11px; letter-spacing: 5px; color: var(--text-muted); margin-top: 6px; }
+.header-divider {
+  width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 30px auto 0;
+}
+
+/* ── コンテナ ── */
+.container { max-width: 680px; margin: 0 auto; padding: 0 24px; }
+
+/* ── セクション見出し ── */
+.section-label {
+  font-size: 10px; letter-spacing: 4px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.section-title {
+  font-size: 22px; color: #f0e6c8; letter-spacing: 2px;
+  border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 28px;
+}
+
+/* ── フォーム ── */
+.form-block { margin-bottom: 60px; margin-top: 50px; }
+
+.form-group { margin-bottom: 24px; }
+.form-group label {
+  display: block; font-size: 11px; letter-spacing: 3px;
+  color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+input, select {
+  width: 100%; padding: 12px 16px;
+  background: #111128; border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: 14px;
+  border-radius: 2px; outline: none;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus { border-color: var(--gold); }
+select option { background: #111128; }
+
+/* ── プラン選択 ── */
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+.plan-card {
+  border: 1px solid var(--border); padding: 24px 20px;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.plan-card:hover { border-color: var(--gold); background: #111128; }
+.plan-card.selected { border-color: var(--gold); background: #14102a; }
+.plan-card input[type=radio] { display: none; }
+.plan-badge {
+  font-size: 9px; letter-spacing: 3px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.plan-name { font-size: 16px; color: #f0e6c8; margin-bottom: 4px; }
+.plan-price { font-size: 26px; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+.plan-price span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+.plan-desc { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.7; }
+
+/* ── ボタン ── */
+.btn-primary {
+  width: 100%; padding: 18px;
+  background: linear-gradient(135deg, #b8922a, var(--gold));
+  color: #0a0a14; font-family: inherit; font-size: 15px;
+  letter-spacing: 3px; border: none; cursor: pointer;
+  transition: opacity 0.2s; margin-top: 32px;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── 鑑定結果ページ ── */
+.result-header {
+  text-align: center; padding: 60px 20px 40px;
+  background: radial-gradient(ellipse at 50% 0%, #1a1235 0%, var(--bg) 70%);
+}
+.trinity {
+  display: flex; gap: 32px; justify-content: center; margin-top: 32px; flex-wrap: wrap;
+}
+.trinity-item { text-align: center; }
+.trinity-label { font-size: 10px; letter-spacing: 3px; color: var(--text-muted); }
+.trinity-value { font-size: 20px; color: var(--gold); margin-top: 4px; letter-spacing: 1px; }
+
+.chapters { margin: 50px 0 80px; }
+.chapter { margin-bottom: 60px; }
+.chapter-number { font-size: 10px; letter-spacing: 4px; color: var(--gold); margin-bottom: 6px; }
+.chapter-title { font-size: 20px; color: #f0e6c8; letter-spacing: 2px; margin-bottom: 20px; }
+.chapter-divider {
+  width: 50px; height: 1px; background: var(--gold); opacity: 0.4; margin-bottom: 28px;
+}
+.chapter-body {
+  font-size: 15px; color: #d8d0bc; line-height: 2.2;
+  text-indent: 1em; min-height: 40px;
+}
+.chapter-body p { margin-bottom: 1.4em; }
+
+/* ── ローディング ── */
+.loading-dot::after {
+  content: ''; display: inline-block;
+  animation: dots 1.5s infinite;
+}
+@keyframes dots {
+  0%   { content: ''; }
+  33%  { content: '・'; }
+  66%  { content: '・・'; }
+  100% { content: '・・・'; }
+}
+.status-bar {
+  font-size: 12px; letter-spacing: 2px; color: var(--text-muted);
+  text-align: center; margin: 20px 0;
+}
+.progress-track {
+  width: 100%; height: 2px; background: var(--border); margin: 8px 0 40px;
+}
+.progress-fill {
+  height: 100%; background: var(--gold);
+  transition: width 0.5s ease; width: 0%;
+}
+
+/* ── 印刷ボタン ── */
+.print-btn {
+  display: none; margin: 0 auto 60px;
+  padding: 14px 40px;
+  border: 1px solid var(--gold); background: transparent;
+  color: var(--gold); font-family: inherit; font-size: 13px;
+  letter-spacing: 3px; cursor: pointer; transition: background 0.2s;
+}
+.print-btn:hover { background: #1a1530; }
+.print-btn.visible { display: block; }
+
+@media print {
+  header, .status-bar, .progress-track, .print-btn { display: none !important; }
+  body { background: white; color: #111; }
+  .chapter-body { color: #222; }
+  .chapter-title, .chapter-number { color: #7a5c1a; }
+}
+
+@media (max-width: 600px) {
+  .plan-grid { grid-template-columns: 1fr; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .logo-title { font-size: 28px; }
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORACLE — 鑑定結果</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="result-header">
+  <div class="logo-stars">✦ ✦ ✦</div>
+  <div class="logo-title">ORACLE</div>
+  <div class="logo-sub">YOUR PERSONAL READING</div>
+  <div class="header-divider"></div>
+
+  <div class="trinity" id="trinity" style="display:none">
+    <div class="trinity-item">
+      <div class="trinity-label">SUN</div>
+      <div class="trinity-value" id="sun-sign">—</div>
+    </div>
+    <div class="trinity-item">
+      <div class="trinity-label">MOON</div>
+      <div class="trinity-value" id="moon-sign">—</div>
+    </div>
+    <div class="trinity-item">
+      <div class="trinity-label">ASC</div>
+      <div class="trinity-value" id="asc-sign">—</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="status-bar" id="statusBar">
+    <span class="loading-dot">星の配置を読み取っています</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="chapters" id="chapters"></div>
+
+  <button class="print-btn" id="printBtn" onclick="window.print()">
+    ✦ PDF として保存する
+  </button>
+</div>
+
+<script>
+const params  = new URLSearchParams(location.search);
+const session = params.get('session_id');
+
+if (!session) {
+  document.getElementById('statusBar').textContent = 'セッションが見つかりません。';
+}
+
+let maxChapter = 2;
+let currentChapter = 0;
+let chapterEl = null;
+
+function setProgress(done, total) {
+  document.getElementById('progressFill').style.width = `${(done / total) * 100}%`;
+}
+
+function startChapter(index, title) {
+  const chapters = document.getElementById('chapters');
+  const div = document.createElement('div');
+  div.className = 'chapter';
+  div.innerHTML = `
+    <div class="chapter-number">CHAPTER ${index + 1}</div>
+    <div class="chapter-title">${title}</div>
+    <div class="chapter-divider"></div>
+    <div class="chapter-body" id="body-${index}"><p></p></div>
+  `;
+  chapters.appendChild(div);
+  chapterEl = div.querySelector(`#body-${index} p`);
+  setProgress(index, maxChapter);
+  document.getElementById('statusBar').innerHTML =
+    `<span class="loading-dot">第${index + 1}章を生成中</span>`;
+}
+
+function appendText(text) {
+  if (!chapterEl) return;
+  chapterEl.textContent += text;
+}
+
+function endChapter() {
+  // 段落分割
+  if (chapterEl) {
+    const raw = chapterEl.textContent;
+    const body = chapterEl.parentElement;
+    body.innerHTML = raw
+      .split(/\n\n+/)
+      .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+      .join('');
+  }
+}
+
+async function fetchChapter(index) {
+  return new Promise((resolve, reject) => {
+    const es = new EventSource(`/api/generate?session_id=${session}&chapter=${index}`);
+
+    es.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+
+      if (data.type === 'chart') {
+        const pos = data.chart.positions;
+        document.getElementById('sun-sign').textContent  = pos[0].sign;
+        document.getElementById('moon-sign').textContent = pos[1].sign;
+        document.getElementById('asc-sign').textContent  = data.chart.asc.sign;
+        document.getElementById('trinity').style.display = 'flex';
+      }
+      if (data.type === 'meta') {
+        maxChapter = data.maxChapter;
+      }
+      if (data.type === 'chapter_start') {
+        startChapter(data.index, data.title);
+      }
+      if (data.type === 'text') {
+        appendText(data.text);
+      }
+      if (data.type === 'chapter_end') {
+        endChapter();
+        es.close();
+        resolve();
+      }
+      if (data.type === 'error') {
+        es.close();
+        reject(new Error(data.message));
+      }
+    };
+
+    es.onerror = () => { es.close(); reject(new Error('接続エラー')); };
+  });
+}
+
+async function run() {
+  try {
+    for (let i = 0; i < maxChapter; i++) {
+      await fetchChapter(i);
+      currentChapter = i + 1;
+    }
+    setProgress(maxChapter, maxChapter);
+    document.getElementById('statusBar').textContent = '鑑定が完了しました';
+    document.getElementById('printBtn').classList.add('visible');
+  } catch (err) {
+    document.getElementById('statusBar').textContent = `エラー: ${err.message}`;
+  }
+}
+
+if (session) run();
+</script>
+
+</body>
+</html>
