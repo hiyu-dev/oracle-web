@@ -312,6 +312,11 @@
 
   <form id="orderForm">
     <div class="form-group">
+      <label>お名前（ニックネーム可）</label>
+      <input type="text" id="name" placeholder="例：さくら、Hana、田中" required>
+      <p style="font-size:11px;color:#6a5a4a;margin-top:6px">鑑定文の中であなたのお名前でお呼びします</p>
+    </div>
+    <div class="form-group">
       <label>生年月日</label>
       <div class="form-row-3">
         <input type="number" id="year"   placeholder="年（例: 1990）" min="1900" max="2010" required>
@@ -404,24 +409,60 @@ document.querySelectorAll('.plan-card').forEach(card => {
 });
 
 const CITIES = {
-  '札幌': { lat: 43.0642, lon: 141.3469, tz: 9 },
-  '仙台': { lat: 38.2688, lon: 140.8721, tz: 9 },
-  '東京': { lat: 35.6895, lon: 139.6917, tz: 9 },
-  '横浜': { lat: 35.4437, lon: 139.6380, tz: 9 },
-  '川崎': { lat: 35.5308, lon: 139.7030, tz: 9 },
-  '埼玉': { lat: 35.8614, lon: 139.6455, tz: 9 },
+  // 北海道・東北
+  '北海道': { lat: 43.0642, lon: 141.3469, tz: 9 }, '札幌': { lat: 43.0642, lon: 141.3469, tz: 9 },
+  '青森': { lat: 40.8244, lon: 140.7400, tz: 9 },
+  '岩手': { lat: 39.7036, lon: 141.1527, tz: 9 }, '盛岡': { lat: 39.7036, lon: 141.1527, tz: 9 },
+  '宮城': { lat: 38.2688, lon: 140.8721, tz: 9 }, '仙台': { lat: 38.2688, lon: 140.8721, tz: 9 },
+  '秋田': { lat: 39.7186, lon: 140.1024, tz: 9 },
+  '山形': { lat: 38.2404, lon: 140.3633, tz: 9 },
+  '福島': { lat: 37.7500, lon: 140.4676, tz: 9 },
+  // 関東
+  '茨城': { lat: 36.3418, lon: 140.4468, tz: 9 }, '水戸': { lat: 36.3418, lon: 140.4468, tz: 9 },
+  '栃木': { lat: 36.5658, lon: 139.8836, tz: 9 }, '宇都宮': { lat: 36.5658, lon: 139.8836, tz: 9 },
+  '群馬': { lat: 36.3911, lon: 139.0608, tz: 9 }, '前橋': { lat: 36.3911, lon: 139.0608, tz: 9 }, '高崎': { lat: 36.3229, lon: 139.0030, tz: 9 },
+  '埼玉': { lat: 35.8614, lon: 139.6455, tz: 9 }, 'さいたま': { lat: 35.8614, lon: 139.6455, tz: 9 },
   '千葉': { lat: 35.6073, lon: 140.1063, tz: 9 },
-  '名古屋': { lat: 35.1815, lon: 136.9066, tz: 9 },
+  '東京': { lat: 35.6895, lon: 139.6917, tz: 9 },
+  '神奈川': { lat: 35.4437, lon: 139.6380, tz: 9 }, '横浜': { lat: 35.4437, lon: 139.6380, tz: 9 },
+  '川崎': { lat: 35.5308, lon: 139.7030, tz: 9 }, '相模原': { lat: 35.5712, lon: 139.3731, tz: 9 },
+  // 中部
+  '新潟': { lat: 37.9161, lon: 139.0364, tz: 9 },
+  '富山': { lat: 36.6953, lon: 137.2113, tz: 9 },
+  '石川': { lat: 36.5947, lon: 136.6256, tz: 9 }, '金沢': { lat: 36.5947, lon: 136.6256, tz: 9 },
+  '福井': { lat: 36.0652, lon: 136.2216, tz: 9 },
+  '山梨': { lat: 35.6635, lon: 138.5685, tz: 9 }, '甲府': { lat: 35.6635, lon: 138.5685, tz: 9 },
+  '長野': { lat: 36.6513, lon: 138.1810, tz: 9 },
+  '岐阜': { lat: 35.3912, lon: 136.7223, tz: 9 },
+  '静岡': { lat: 34.9769, lon: 138.3831, tz: 9 }, '浜松': { lat: 34.7108, lon: 137.7261, tz: 9 },
+  '愛知': { lat: 35.1815, lon: 136.9066, tz: 9 }, '名古屋': { lat: 35.1815, lon: 136.9066, tz: 9 },
+  '三重': { lat: 34.7303, lon: 136.5086, tz: 9 }, '津': { lat: 34.7303, lon: 136.5086, tz: 9 },
+  // 近畿
+  '滋賀': { lat: 35.0045, lon: 135.8686, tz: 9 }, '大津': { lat: 35.0045, lon: 135.8686, tz: 9 },
   '京都': { lat: 35.0116, lon: 135.7681, tz: 9 },
   '大阪': { lat: 34.6937, lon: 135.5022, tz: 9 },
-  '神戸': { lat: 34.6901, lon: 135.1956, tz: 9 },
+  '兵庫': { lat: 34.6901, lon: 135.1956, tz: 9 }, '神戸': { lat: 34.6901, lon: 135.1956, tz: 9 },
+  '奈良': { lat: 34.6851, lon: 135.8050, tz: 9 },
+  '和歌山': { lat: 34.2261, lon: 135.1675, tz: 9 },
+  // 中国・四国
+  '鳥取': { lat: 35.5011, lon: 134.2351, tz: 9 },
+  '島根': { lat: 35.4722, lon: 133.0505, tz: 9 }, '松江': { lat: 35.4722, lon: 133.0505, tz: 9 },
+  '岡山': { lat: 34.6618, lon: 133.9344, tz: 9 },
   '広島': { lat: 34.3853, lon: 132.4553, tz: 9 },
+  '山口': { lat: 34.1861, lon: 131.4706, tz: 9 },
+  '徳島': { lat: 34.0657, lon: 134.5593, tz: 9 },
+  '香川': { lat: 34.3401, lon: 134.0434, tz: 9 }, '高松': { lat: 34.3401, lon: 134.0434, tz: 9 },
+  '愛媛': { lat: 33.8416, lon: 132.7657, tz: 9 }, '松山': { lat: 33.8416, lon: 132.7657, tz: 9 },
+  '高知': { lat: 33.5597, lon: 133.5311, tz: 9 },
+  // 九州・沖縄
   '福岡': { lat: 33.5904, lon: 130.4017, tz: 9 },
-  '那覇': { lat: 26.2124, lon: 127.6809, tz: 9 },
-  '札幌市': { lat: 43.0642, lon: 141.3469, tz: 9 },
-  '東京都': { lat: 35.6895, lon: 139.6917, tz: 9 },
-  '大阪府': { lat: 34.6937, lon: 135.5022, tz: 9 },
-  '北海道': { lat: 43.0642, lon: 141.3469, tz: 9 },
+  '佐賀': { lat: 33.2494, lon: 130.2988, tz: 9 },
+  '長崎': { lat: 32.7503, lon: 129.8777, tz: 9 },
+  '熊本': { lat: 32.7898, lon: 130.7417, tz: 9 },
+  '大分': { lat: 33.2382, lon: 131.6126, tz: 9 },
+  '宮崎': { lat: 31.9111, lon: 131.4239, tz: 9 },
+  '鹿児島': { lat: 31.5966, lon: 130.5571, tz: 9 },
+  '沖縄': { lat: 26.2124, lon: 127.6809, tz: 9 }, '那覇': { lat: 26.2124, lon: 127.6809, tz: 9 },
 };
 
 function findCity(name) {
@@ -446,6 +487,7 @@ document.getElementById('orderForm').addEventListener('submit', async (e) => {
     hour:   parseInt(document.getElementById('hour').value)   || 12,
     minute: parseInt(document.getElementById('minute').value) || 0,
     lat: cityData.lat, lon: cityData.lon, tz: cityData.tz, placeName,
+    name: document.getElementById('name').value.trim(),
   };
   const plan = document.querySelector('input[name=plan]:checked').value;
   const btn = document.getElementById('submitBtn');
