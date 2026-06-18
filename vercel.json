@@ -4,7 +4,7 @@
   ],
   "functions": {
     "api/generate.js": {
-      "maxDuration": 300
+      "maxDuration": 60
     },
     "api/webhook.js": {
       "maxDuration": 30
