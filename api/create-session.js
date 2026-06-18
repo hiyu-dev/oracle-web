@@ -5,12 +5,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const PLANS = {
   basic: {
     name: '基本鑑定（2章）',
-    amount: 980000, // 9,800円（テスト中は低額にして確認）
+    amount: 9800,
     chapters: 2,
   },
   full: {
     name: '総合鑑定（6章）',
-    amount: 2980000, // 29,800円
+    amount: 29800,
     chapters: 6,
   },
 };
