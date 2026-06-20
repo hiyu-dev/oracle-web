@@ -3,208 +3,431 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>数秘術 無料診断 | ORACLE</title>
+  <title>数秘術 無料診断 — 生年月日で読み解く運命数 | ORACLE</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .num-hero {
-      text-align: center;
-      padding: 80px 20px 60px;
-      background: linear-gradient(180deg, #0a0a14 0%, #10101e 100%);
-    }
-    .num-hero .badge {
-      display: inline-block;
-      border: 1px solid #c9a84c;
-      color: #c9a84c;
-      font-size: 12px;
-      letter-spacing: 3px;
-      padding: 4px 16px;
-      margin-bottom: 24px;
-    }
-    .num-hero h1 {
-      font-size: clamp(28px, 5vw, 48px);
-      font-weight: 300;
-      letter-spacing: 6px;
-      color: #f0e6c8;
-      margin-bottom: 16px;
-    }
-    .num-hero p {
-      color: #8888aa;
-      font-size: 15px;
-      line-height: 2;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    .num-form-section {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 60px 20px;
-    }
-    .num-form-section h2 {
-      text-align: center;
-      font-size: 18px;
-      font-weight: 300;
-      letter-spacing: 4px;
-      color: #c9a84c;
-      margin-bottom: 40px;
-    }
-    .num-result {
+    /* ── ローディングオーバーレイ ── */
+    #loadingOverlay {
+      position: fixed; inset: 0;
+      background: rgba(5,5,15,0.97);
+      z-index: 1000;
       display: none;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-    .num-number-display {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, #12121f, #1a1a2e);
-      border: 1px solid rgba(201, 168, 76, 0.3);
-      border-radius: 4px;
-      margin-bottom: 40px;
+    .loading-label {
+      font-size: 11px; letter-spacing: 5px; color: #555577; margin-bottom: 40px;
     }
-    .num-number-display .life-number {
-      font-size: 96px;
-      font-weight: 200;
+    #loadingNum {
+      font-size: 140px; font-weight: 200; color: #2a2a44; line-height: 1;
+      margin-bottom: 48px; min-width: 200px; text-align: center;
+      transition: color 0.6s, text-shadow 0.6s;
+    }
+    #loadingNum.revealed {
       color: #c9a84c;
-      line-height: 1;
-      margin-bottom: 8px;
+      text-shadow: 0 0 80px rgba(201,168,76,0.5), 0 0 20px rgba(201,168,76,0.8);
     }
-    .num-number-display .number-label {
-      font-size: 13px;
-      letter-spacing: 4px;
-      color: #8888aa;
-      margin-bottom: 4px;
+    .loading-dots { display: flex; gap: 10px; }
+    .loading-dots span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(201,168,76,0.35);
+      animation: dotPulse 1.3s ease-in-out infinite;
     }
-    .num-number-display .number-name {
-      font-size: 22px;
-      letter-spacing: 6px;
-      color: #f0e6c8;
-      font-weight: 300;
+    .loading-dots span:nth-child(2) { animation-delay: 0.22s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.44s; }
+    @keyframes dotPulse {
+      0%,100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); }
     }
-    .num-free-text {
-      background: rgba(255,255,255,0.03);
-      border-left: 2px solid rgba(201,168,76,0.4);
-      padding: 32px;
-      margin-bottom: 48px;
-      line-height: 2;
-      color: #ccc;
-      font-size: 15px;
-      white-space: pre-line;
-    }
-    .num-paid-cta {
+
+    /* ── ヒーロー ── */
+    .n-hero {
       text-align: center;
-      background: linear-gradient(135deg, #0e0e1a, #16162a);
-      border: 1px solid rgba(201,168,76,0.5);
-      border-radius: 4px;
-      padding: 48px 32px;
-      margin-bottom: 48px;
+      padding: 72px 20px 64px;
+      background: radial-gradient(ellipse at 50% 40%, #150f2a 0%, #0a0a14 70%);
+      position: relative; overflow: hidden;
     }
-    .num-paid-cta h3 {
-      font-size: 18px;
-      font-weight: 300;
-      letter-spacing: 3px;
-      color: #f0e6c8;
-      margin-bottom: 16px;
+    .n-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='0.8' fill='%23c9a84c' opacity='0.12'/%3E%3C/svg%3E") repeat;
+      pointer-events: none;
     }
-    .num-paid-cta p {
-      color: #8888aa;
-      font-size: 14px;
-      line-height: 1.9;
-      margin-bottom: 32px;
+    .n-hero .badge {
+      display: inline-block; border: 1px solid #c9a84c; color: #c9a84c;
+      font-size: 10px; letter-spacing: 5px; padding: 4px 18px; margin-bottom: 28px;
     }
-    .num-paid-cta .price-tag {
-      font-size: 32px;
-      color: #c9a84c;
-      font-weight: 200;
-      margin-bottom: 24px;
+    .n-hero h1 {
+      font-size: clamp(26px, 5vw, 46px); font-weight: 300; letter-spacing: 4px;
+      color: #f0e6c8; margin-bottom: 20px; line-height: 1.5;
     }
-    .num-paid-cta .price-tag span {
-      font-size: 14px;
-      color: #8888aa;
+    .n-hero h1 em { color: #c9a84c; font-style: normal; }
+    .n-hero p {
+      color: #8888aa; font-size: 15px; line-height: 2.1;
+      max-width: 520px; margin: 0 auto;
     }
-    .oracle-cta-box {
-      text-align: center;
+
+    /* ── 数秘術とは ── */
+    .about-section {
+      max-width: 720px; margin: 0 auto; padding: 72px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .section-label {
+      font-size: 10px; letter-spacing: 5px; color: #c9a84c; margin-bottom: 20px;
+    }
+    .about-section h2 {
+      font-size: clamp(20px, 3vw, 28px); font-weight: 300; letter-spacing: 3px;
+      color: #f0e6c8; margin-bottom: 24px;
+    }
+    .about-section p {
+      color: #9999bb; font-size: 15px; line-height: 2.1; margin-bottom: 16px;
+    }
+    .about-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px; margin-top: 40px;
+    }
+    .about-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 4px; padding: 24px 20px;
+    }
+    .about-card .icon { font-size: 22px; margin-bottom: 12px; }
+    .about-card h3 { font-size: 14px; letter-spacing: 2px; color: #c9a84c; margin-bottom: 8px; font-weight: 400; }
+    .about-card p { font-size: 13px; color: #8888aa; line-height: 1.8; margin: 0; }
+
+    /* ── 比較表 ── */
+    .compare-section {
+      max-width: 720px; margin: 0 auto; padding: 0 24px 72px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .compare-table {
+      width: 100%; border-collapse: collapse; margin-top: 32px;
+    }
+    .compare-table th {
+      padding: 14px 20px; font-size: 12px; letter-spacing: 2px; font-weight: 400;
+      text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .compare-table th:first-child { text-align: left; color: #555577; }
+    .compare-table th.free-col { color: #8888aa; }
+    .compare-table th.paid-col { color: #c9a84c; background: rgba(201,168,76,0.06); border-left: 1px solid rgba(201,168,76,0.2); border-right: 1px solid rgba(201,168,76,0.2); }
+    .compare-table td {
+      padding: 13px 20px; font-size: 14px; color: #9999bb;
+      border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center;
+    }
+    .compare-table td:first-child { text-align: left; color: #ccc; }
+    .compare-table td.paid-col { background: rgba(201,168,76,0.04); border-left: 1px solid rgba(201,168,76,0.15); border-right: 1px solid rgba(201,168,76,0.15); }
+    .check { color: #c9a84c; font-size: 16px; }
+    .cross { color: #333355; font-size: 16px; }
+
+    /* ── 運命数一覧 ── */
+    .numbers-section {
+      max-width: 720px; margin: 0 auto; padding: 72px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .numbers-section h2 {
+      font-size: 18px; font-weight: 300; letter-spacing: 4px;
+      color: #f0e6c8; margin-bottom: 8px;
+    }
+    .numbers-section .sub { font-size: 13px; color: #555577; margin-bottom: 36px; }
+    .num-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .num-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px; padding: 20px 12px; text-align: center;
+      transition: border-color 0.3s;
+    }
+    .num-card:hover { border-color: rgba(201,168,76,0.4); }
+    .num-card .n { font-size: 36px; font-weight: 200; color: #c9a84c; line-height: 1; margin-bottom: 6px; }
+    .num-card .k { font-size: 12px; letter-spacing: 1px; color: #8888aa; }
+    .num-card .master-badge { font-size: 9px; letter-spacing: 1px; color: #c9a84c; opacity: 0.7; margin-bottom: 2px; }
+
+    /* ── フォーム ── */
+    .n-form-section {
+      max-width: 480px; margin: 0 auto; padding: 72px 24px;
+    }
+    .n-form-section .form-heading {
+      text-align: center; font-size: 18px; font-weight: 300;
+      letter-spacing: 4px; color: #c9a84c; margin-bottom: 8px;
+    }
+    .n-form-section .form-sub {
+      text-align: center; font-size: 13px; color: #555577; margin-bottom: 40px;
+    }
+
+    /* ── 結果 ── */
+    .n-result { display: none; }
+    .num-reveal {
+      text-align: center; padding: 72px 20px 56px;
+      background: linear-gradient(180deg, #0e0e1e 0%, #12121f 100%);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      position: relative; overflow: hidden;
+    }
+    .num-reveal::after {
+      content: '';
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+    .num-reveal .life-num-label {
+      font-size: 10px; letter-spacing: 6px; color: #555577; margin-bottom: 16px;
+    }
+    .num-reveal .life-num {
+      font-size: 120px; font-weight: 200; color: #c9a84c; line-height: 1;
+      margin-bottom: 12px;
+      text-shadow: 0 0 60px rgba(201,168,76,0.2);
+    }
+    .num-reveal .life-num-name {
+      font-size: 24px; letter-spacing: 7px; color: #f0e6c8; font-weight: 300;
+    }
+    .num-reveal .life-num-sub {
+      font-size: 12px; letter-spacing: 3px; color: #555577; margin-top: 6px;
+    }
+    .result-body { max-width: 640px; margin: 0 auto; padding: 56px 24px 0; }
+    .free-reading {
+      background: rgba(255,255,255,0.025);
+      border-left: 2px solid rgba(201,168,76,0.5);
+      padding: 36px 32px;
+      line-height: 2.2; color: #bbbbd0; font-size: 15.5px;
+      white-space: pre-line; margin-bottom: 48px;
+    }
+
+    /* ── ティーザー ── */
+    .teaser-block {
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px; padding: 36px; margin-bottom: 40px;
+      background: rgba(0,0,0,0.2);
+    }
+    .teaser-block .teaser-label {
+      font-size: 10px; letter-spacing: 4px; color: #555577; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .teaser-block .teaser-label::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+    }
+    .teaser-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 14px; color: #8888aa;
+    }
+    .teaser-item:last-child { border-bottom: none; }
+    .teaser-item .lock { color: rgba(201,168,76,0.4); font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── ¥500 CTA ── */
+    .paid-cta-block {
+      background: linear-gradient(135deg, #0d0d1e, #181828);
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 4px; padding: 48px 36px;
+      text-align: center; margin-bottom: 32px;
+    }
+    .paid-cta-block h3 {
+      font-size: 20px; font-weight: 300; letter-spacing: 3px;
+      color: #f0e6c8; margin-bottom: 16px;
+    }
+    .paid-cta-block .cta-desc {
+      color: #8888aa; font-size: 14px; line-height: 2; margin-bottom: 36px;
+    }
+    .paid-cta-block .price {
+      font-size: 40px; font-weight: 200; color: #c9a84c; margin-bottom: 8px;
+    }
+    .paid-cta-block .price small { font-size: 14px; color: #8888aa; }
+    .paid-cta-block .price-note {
+      font-size: 12px; color: #555577; margin-bottom: 28px; letter-spacing: 1px;
+    }
+
+    /* ── シェア ── */
+    .share-block {
+      text-align: center; margin-bottom: 48px;
+    }
+    .share-block p { font-size: 12px; color: #555577; letter-spacing: 2px; margin-bottom: 14px; }
+    .share-btn-x {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #000; color: #fff; border: 1px solid #333;
+      padding: 12px 28px; font-size: 13px; letter-spacing: 1px;
+      cursor: pointer; border-radius: 2px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .share-btn-x:hover { background: #111; }
+    .share-btn-x svg { width: 16px; height: 16px; fill: white; }
+
+    /* ── ORACLE CTA ── */
+    .oracle-cta-block {
       border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 4px;
-      padding: 40px 24px;
-      background: rgba(201,168,76,0.03);
+      border-radius: 4px; padding: 48px 32px;
+      text-align: center; margin-bottom: 80px;
+      background: rgba(201,168,76,0.02);
     }
-    .oracle-cta-box p {
-      color: #8888aa;
-      font-size: 14px;
-      line-height: 1.9;
-      margin-bottom: 24px;
+    .oracle-cta-block .badge2 {
+      display: inline-block; border: 1px solid rgba(201,168,76,0.4);
+      color: #c9a84c; font-size: 9px; letter-spacing: 4px;
+      padding: 3px 14px; margin-bottom: 20px;
     }
-    .oracle-cta-box a {
+    .oracle-cta-block h3 {
+      font-size: 18px; font-weight: 300; letter-spacing: 3px;
+      color: #f0e6c8; margin-bottom: 16px;
+    }
+    .oracle-cta-block p {
+      color: #8888aa; font-size: 14px; line-height: 2; margin-bottom: 28px;
+    }
+    .oracle-cta-block a {
       display: inline-block;
-      border: 1px solid rgba(201,168,76,0.6);
-      color: #c9a84c;
-      text-decoration: none;
-      padding: 14px 32px;
-      font-size: 13px;
-      letter-spacing: 3px;
-      transition: all 0.3s;
+      border: 1px solid rgba(201,168,76,0.5); color: #c9a84c;
+      padding: 14px 36px; font-size: 13px; letter-spacing: 3px;
+      text-decoration: none; transition: all 0.3s;
     }
-    .oracle-cta-box a:hover {
-      background: rgba(201,168,76,0.1);
-    }
-    #diagnoseBtn {
+    .oracle-cta-block a:hover { background: rgba(201,168,76,0.08); }
+
+    /* ── ボタン ── */
+    .btn-gold {
       width: 100%;
       background: linear-gradient(135deg, #c9a84c, #a07830);
-      color: #0a0a14;
-      border: none;
-      padding: 18px;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: opacity 0.3s;
+      color: #0a0a14; border: none; padding: 20px;
+      font-size: 16px; font-weight: 700; letter-spacing: 2px;
+      cursor: pointer; border-radius: 2px; transition: opacity 0.3s;
     }
-    #diagnoseBtn:hover { opacity: 0.85; }
-    #paidBtn {
-      width: 100%;
-      background: linear-gradient(135deg, #c9a84c, #a07830);
-      color: #0a0a14;
-      border: none;
-      padding: 18px;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: opacity 0.3s;
+    .btn-gold:hover { opacity: 0.85; }
+    .btn-gold:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── ナビ ── */
+    .top-nav {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    #paidBtn:hover { opacity: 0.85; }
-    #paidBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .nav-back {
-      text-align: center;
-      padding: 20px;
+    .top-nav a { color: #555577; font-size: 12px; letter-spacing: 2px; text-decoration: none; }
+    .top-nav a:hover { color: #c9a84c; }
+    .bottom-nav {
+      text-align: center; padding: 28px 20px;
       border-top: 1px solid rgba(255,255,255,0.05);
     }
-    .nav-back a {
-      color: #555577;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-decoration: none;
-    }
-    .nav-back a:hover { color: #c9a84c; }
+    .bottom-nav a { color: #555577; font-size: 12px; letter-spacing: 2px; text-decoration: none; }
+    .bottom-nav a:hover { color: #c9a84c; }
   </style>
 </head>
 <body>
 
-<div class="nav-back" style="border-top:none; border-bottom: 1px solid rgba(255,255,255,0.05); padding:16px 20px; text-align:left;">
+<!-- ローディングオーバーレイ -->
+<div id="loadingOverlay">
+  <div class="loading-label">READING YOUR NUMBERS...</div>
+  <div id="loadingNum">?</div>
+  <div class="loading-dots">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<div class="top-nav">
   <a href="index.html">← ORACLE 本格西洋占星術鑑定</a>
 </div>
 
-<div class="num-hero">
-  <div class="badge">NUMEROLOGY</div>
-  <h1>数秘術 無料診断</h1>
-  <p>生年月日に秘められた数字があなたの本質を語る。<br>名前と生年月日だけで、あなたの「運命数」を読み解く。</p>
+<!-- ヒーロー -->
+<div class="n-hero">
+  <div class="badge">NUMEROLOGY FREE READING</div>
+  <h1>生年月日が語る、<br><em>あなたの運命数。</em></h1>
+  <p>数秘術（ニューメロロジー）は、生年月日に秘められた数字から<br>あなたの魂の性質・人生のテーマ・才能と課題を読み解く占術。<br>名前と生年月日だけで、今すぐ無料診断できます。</p>
+</div>
+
+<!-- 数秘術とは -->
+<div class="about-section">
+  <div class="section-label">WHAT IS NUMEROLOGY</div>
+  <h2>数秘術とは？</h2>
+  <p>数秘術（ニューメロロジー）は、古代ギリシャの哲学者ピタゴラスが体系化したとされる占術です。生年月日に含まれる数字を一定のルールで縮約し「運命数（ライフパスナンバー）」を導き出します。</p>
+  <p>運命数は1〜9の数字（＋特別な力を持つマスターナンバー11・22・33）の12種類。それぞれに固有の意味があり、あなたが生まれながらに持つ魂の傾向、人生で繰り返し直面するテーマ、そして開花させるべき才能を示します。</p>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="icon">✦</div>
+      <h3>魂の性質</h3>
+      <p>あなたが生まれながらに持つ本質的な気質と、人とは違う視点・感性</p>
+    </div>
+    <div class="about-card">
+      <div class="icon">◈</div>
+      <h3>人生のテーマ</h3>
+      <p>この生で繰り返し直面する課題と、それを乗り越えたときに開く扉</p>
+    </div>
+    <div class="about-card">
+      <div class="icon">◇</div>
+      <h3>才能と使命</h3>
+      <p>あなたが最も輝ける場面・環境と、周囲に与えることができるもの</p>
+    </div>
+    <div class="about-card">
+      <div class="icon">○</div>
+      <h3>対人関係の傾向</h3>
+      <p>恋愛・仕事・家族——人との関わり方に現れるあなた固有のパターン</p>
+    </div>
+  </div>
+</div>
+
+<!-- 無料 vs 有料比較 -->
+<div class="compare-section">
+  <div class="section-label">FREE vs PAID</div>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th class="free-col">無料診断</th>
+      <th class="paid-col">AI詳細鑑定 ¥500</th>
+    </tr>
+    <tr>
+      <td>運命数（ライフパスナンバー）</td>
+      <td class="free-col"><span class="check">✓</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>基本的な魂の性質・概要</td>
+      <td class="free-col"><span class="check">✓</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>才能の具体的な活かし方</td>
+      <td class="free-col"><span class="cross">—</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>繰り返すパターンと乗り越え方</td>
+      <td class="free-col"><span class="cross">—</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>恋愛・対人関係の傾向</td>
+      <td class="free-col"><span class="cross">—</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>今のあなたに必要なこと</td>
+      <td class="free-col"><span class="cross">—</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+    <tr>
+      <td>AI個人鑑定文（約1,200字）</td>
+      <td class="free-col"><span class="cross">—</span></td>
+      <td class="paid-col"><span class="check">✓</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- 運命数一覧 -->
+<div class="numbers-section">
+  <div class="section-label">LIFE PATH NUMBERS</div>
+  <h2>12の運命数</h2>
+  <div class="sub">あなたはどの数字？診断してみよう</div>
+  <div class="num-grid">
+    <div class="num-card"><div class="n">1</div><div class="k">開拓者</div></div>
+    <div class="num-card"><div class="n">2</div><div class="k">調停者</div></div>
+    <div class="num-card"><div class="n">3</div><div class="k">表現者</div></div>
+    <div class="num-card"><div class="n">4</div><div class="k">建設者</div></div>
+    <div class="num-card"><div class="n">5</div><div class="k">冒険者</div></div>
+    <div class="num-card"><div class="n">6</div><div class="k">奉仕者</div></div>
+    <div class="num-card"><div class="n">7</div><div class="k">探求者</div></div>
+    <div class="num-card"><div class="n">8</div><div class="k">指揮者</div></div>
+    <div class="num-card"><div class="n">9</div><div class="k">完成者</div></div>
+    <div class="num-card"><div class="master-badge">MASTER</div><div class="n" style="font-size:28px;">11</div><div class="k">啓示者</div></div>
+    <div class="num-card"><div class="master-badge">MASTER</div><div class="n" style="font-size:28px;">22</div><div class="k">夢想建築家</div></div>
+    <div class="num-card"><div class="master-badge">MASTER</div><div class="n" style="font-size:28px;">33</div><div class="k">愛の師</div></div>
+  </div>
 </div>
 
 <!-- 入力フォーム -->
-<div class="num-form-section">
-  <h2>DIAGNOSIS</h2>
+<div class="n-form-section">
+  <div class="form-heading">DIAGNOSIS</div>
+  <div class="form-sub">名前と生年月日を入力してください</div>
+
   <div class="form-group">
     <label class="form-label">お名前</label>
     <input type="text" id="nameInput" class="form-input" placeholder="山田 太郎" maxlength="30">
@@ -227,35 +450,89 @@
     </div>
   </div>
   <div style="margin-top:32px;">
-    <button id="diagnoseBtn" onclick="diagnose()">診断する（無料）</button>
+    <button class="btn-gold" id="diagnoseBtn" onclick="diagnose()">無料で運命数を診断する</button>
   </div>
   <p id="errorMsg" style="color:#c84c4c;font-size:13px;text-align:center;margin-top:12px;display:none;"></p>
 </div>
 
 <!-- 結果 -->
-<div class="num-result" id="resultSection">
-  <div class="num-number-display">
-    <div class="number-label">YOUR LIFE PATH NUMBER</div>
-    <div class="life-number" id="lifeNumber">—</div>
-    <div class="number-name" id="numberName">—</div>
+<div class="n-result" id="resultSection">
+
+  <div class="num-reveal">
+    <div class="life-num-label">YOUR LIFE PATH NUMBER</div>
+    <div class="life-num" id="lifeNumber">—</div>
+    <div class="life-num-name" id="numberName">—</div>
+    <div class="life-num-sub" id="nameDisplay"></div>
   </div>
 
-  <div class="num-free-text" id="freeText"></div>
+  <div class="result-body">
 
-  <div class="num-paid-cta">
-    <h3>さらに深く、あなたを読み解く</h3>
-    <p>無料診断はここまで。<br>AIがあなたの運命数をもとに、才能・課題・これからの可能性を<br>1,200字以上の個人鑑定文として生成します。</p>
-    <div class="price-tag">¥500 <span>（税込）</span></div>
-    <button id="paidBtn" onclick="startPayment()">AI詳細鑑定を受ける ¥500</button>
-  </div>
+    <div class="free-reading" id="freeText"></div>
 
-  <div class="oracle-cta-box">
-    <p>さらに本格的な鑑定をお求めの方へ。<br>出生時刻・出生地まで使った西洋占星術で、<br>あなたの人生を6章・約12,000字で読み解きます。</p>
-    <a href="index.html">ORACLE 本格鑑定を見る →</a>
+    <!-- ティーザー -->
+    <div class="teaser-block">
+      <div class="teaser-label">AI詳細鑑定（¥500）で読み解けること</div>
+      <div class="teaser-item">
+        <span class="lock">🔒</span>
+        <span>あなたの運命数が輝く具体的な場面・環境・仕事のスタイル</span>
+      </div>
+      <div class="teaser-item">
+        <span class="lock">🔒</span>
+        <span>あなたが繰り返しやすい行動パターンとその本当の原因</span>
+      </div>
+      <div class="teaser-item">
+        <span class="lock">🔒</span>
+        <span>恋愛・対人関係における傾向と、うまくいく関係・いかない関係</span>
+      </div>
+      <div class="teaser-item">
+        <span class="lock">🔒</span>
+        <span>課題を乗り越えたとき、あなたの人生に起きること</span>
+      </div>
+      <div class="teaser-item">
+        <span class="lock">🔒</span>
+        <span>今のあなたに最も必要なこと・意識すべきこと</span>
+      </div>
+    </div>
+
+    <!-- ¥500 CTA -->
+    <div class="paid-cta-block">
+      <h3>あなただけの鑑定文を生成する</h3>
+      <div class="cta-desc">
+        AIがあなたの運命数を深く分析し、<br>
+        才能・課題・対人関係・これからの可能性を<br>
+        約1,200字の個人鑑定文として即時生成します。
+      </div>
+      <div class="price">¥500 <small>（税込）</small></div>
+      <div class="price-note">クレジットカード決済 / 即時生成</div>
+      <button class="btn-gold" id="paidBtn" onclick="startPayment()">AI詳細鑑定を受ける — ¥500</button>
+    </div>
+
+    <!-- Xシェア -->
+    <div class="share-block">
+      <p>SHARE YOUR NUMBER</p>
+      <a class="share-btn-x" id="shareBtn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.738l7.74-8.85L1.254 2.25H8.08l4.261 5.638 5.903-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        結果をXでシェア
+      </a>
+    </div>
+
+    <!-- ORACLE CTA -->
+    <div class="oracle-cta-block">
+      <div class="badge2">PREMIUM</div>
+      <h3>さらに本格的な鑑定へ</h3>
+      <p>
+        数秘術は生年月日から読む「入口の占い」。<br>
+        出生時刻・出生地・10天体の配置まで使う<strong style="color:#d4c8b0">西洋占星術</strong>は、<br>
+        あなたの人生を6章・約12,000字で読み解きます。<br>
+        より深く、より精密な鑑定をお求めの方へ。
+      </p>
+      <a href="index.html">ORACLE 本格西洋占星術鑑定を見る →</a>
+    </div>
+
   </div>
 </div>
 
-<div class="nav-back">
+<div class="bottom-nav">
   <a href="index.html">ORACLE — プレミアム西洋占星術鑑定</a>
 </div>
 
@@ -267,18 +544,18 @@ const NUMBER_NAMES = {
 };
 
 const FREE_READINGS = {
-  1: `あなたの運命数は「1」——開拓者の魂。\n\n何もないところから道を切り開く力が、あなたの核心にある。人に頼らず、自分の判断で進む。それがときに孤独に見えても、それがあなたの本来の姿だ。\n\n1の人は「始まり」を司る。新しいことへの恐れより、停滞への不満が勝る。あなたの中に眠る可能性は、まだほんの一部しか目覚めていない。`,
-  2: `あなたの運命数は「2」——調停者の魂。\n\nあなたには、人と人の間に橋をかける静かな力がある。誰かが気づかないところで、誰かを支え続けている。その繊細さは弱さではない——世界が必要としている感受性だ。\n\n2の人は「関係」を司る。一人では完成しない何かが、あなたを動かしている。`,
-  3: `あなたの運命数は「3」——表現者の魂。\n\nあなたの内側には、言葉にしきれないほどの世界がある。それを形にしたくて、どこかいつもうずうずしている。\n\n3の人は「創造」を司る。笑い、言葉、アイデア——何であれ、あなたが表現したものは他の人には出せない色を持っている。その才能を、まだ眠らせたままにしているとしたら？`,
-  4: `あなたの運命数は「4」——建設者の魂。\n\n派手さはないが、あなたが作ったものは崩れない。コツコツと確かなものを積み上げることに、他の人にはない喜びを感じる。\n\n4の人は「安定」を司る。信頼される理由が、あなたにはある。ただ、その堅実さが、ときに自分自身を縛ることもある。`,
-  5: `あなたの運命数は「5」——冒険者の魂。\n\n同じ場所に留まることが、あなたには苦痛だ。変化が日常で、自由が酸素。どこへ向かうかより「動いていること」に意味を感じる。\n\n5の人は「変化」を司る。あなたの人生はまだ途中だ——この先に、あなたをもっと揺さぶる出来事が待っている。`,
-  6: `あなたの運命数は「6」——奉仕者の魂。\n\n誰かが困っていると、放っておけない。家族、友人、身近な人のために動くとき、あなたは本当の力を発揮する。\n\n6の人は「責任」を司る。その愛の深さは本物だが、自分を後回しにしすぎるクセはないだろうか。`,
-  7: `あなたの運命数は「7」——探求者の魂。\n\n表面より、その奥を見たくなる。「なぜ？」という問いが、あなたの原動力だ。一人でいる時間に、最も深く考えが育つ。\n\n7の人は「真実」を司る。あなたが見えているものを、他の人はまだ気づいていないことが多い。その洞察を、どこへ向けるかで人生が変わる。`,
-  8: `あなたの運命数は「8」——指揮者の魂。\n\n力、影響力、結果——あなたはそれを求める本能を持っている。諦めない粘りと、大局を見る目を生まれながらにして持っている。\n\n8の人は「力」を司る。ただしその力は、方向次第で人を引き上げることも、消耗させることもある。あなたは今、どちらに向かっているか？`,
-  9: `あなたの運命数は「9」——完成者の魂。\n\n何かが終わるとき、あなたは不思議と穏やかでいられる。全てを手放すことを、どこかで知っているかのように。\n\n9の人は「完成」を司る。多くを経験し、多くを与えるよう設計されている魂。あなたの器は、まだ本当の大きさを見せていない。`,
-  11: `あなたの運命数は「11」——マスターナンバー、啓示者の魂。\n\n11は、普通の数の枠に収まらない。強烈な直感と、理由のわからない使命感。夢と現実の間に住んでいるような感覚を、子どもの頃から持っていたかもしれない。\n\nその感受性は、正しく使えば人の心を動かす力になる。`,
-  22: `あなたの運命数は「22」——マスターナンバー、夢想建築家の魂。\n\n22は、夢を現実に変える力を持つ魂だ。ただし、そのスケールは並外れている。小さなことで満足できない、という感覚はないだろうか。\n\n世界に形を残すために生まれてくる魂。まだその器を使いこなせていないとしたら、それは準備中のしるしかもしれない。`,
-  33: `あなたの運命数は「33」——マスターナンバー、愛の師の魂。\n\n33はすべての数の中で最も稀な、愛と奉仕の魂だ。誰かを助けたい、癒したい、という衝動が、あなたの根底にある。\n\nこの数は、大きな責任を伴う。あなたが本当の力に目覚めるのは、自分自身と正直に向き合ったときだ。`,
+  1: `あなたの運命数は「1」——開拓者の魂。\n\n何もないところから道を切り開く力が、あなたの核心にある。人に頼らず、自分の判断で進む。それがときに孤独に見えても、それがあなたの本来の姿だ。\n\n1の人は「始まり」を司る。新しいことへの恐れより、停滞への不満が勝る。リーダーとして自然に人が集まる一方、自分の意志を押し通そうとするあまり、周囲との摩擦が生まれることもある。\n\nあなたの中に眠る可能性は、まだほんの一部しか目覚めていない。`,
+  2: `あなたの運命数は「2」——調停者の魂。\n\nあなたには、人と人の間に橋をかける静かな力がある。誰かが気づかないところで、誰かを支え続けている。その繊細さは弱さではない——世界が必要としている感受性だ。\n\n2の人は「関係」を司る。一人では完成しない何かが、あなたを動かしている。相手の感情を敏感に読み取り、場の空気を整える力は本物だが、その繊細さゆえに傷つきやすい面もある。\n\n一人でいるより、誰かとつながっているときに最も輝く。`,
+  3: `あなたの運命数は「3」——表現者の魂。\n\nあなたの内側には、言葉にしきれないほどの世界がある。それを形にしたくて、どこかいつもうずうずしている。\n\n3の人は「創造」を司る。笑い、言葉、アイデア——何であれ、あなたが表現したものは他の人には出せない色を持っている。社交的で、人を楽しませる才能があると言われたことがあるかもしれない。\n\nその才能を、まだ眠らせたままにしているとしたら？`,
+  4: `あなたの運命数は「4」——建設者の魂。\n\n派手さはないが、あなたが作ったものは崩れない。コツコツと確かなものを積み上げることに、他の人にはない喜びを感じる。\n\n4の人は「安定」を司る。計画を立て、着実に実行する能力。信頼される理由が、あなたにはある。ルールと秩序を大切にするあまり、変化を恐れる場面が出てくることもある。\n\nしかしその堅実さこそが、長い目で見たとき最も強い武器になる。`,
+  5: `あなたの運命数は「5」——冒険者の魂。\n\n同じ場所に留まることが、あなたには苦痛だ。変化が日常で、自由が酸素。どこへ向かうかより「動いていること」に意味を感じる。\n\n5の人は「変化」を司る。好奇心が旺盛で、新しい経験に飛び込む勇気がある。多才で魅力的だが、一つのことに集中し続けることが苦手に感じることもあるかもしれない。\n\nあなたの人生はまだ途中だ——この先に、あなたをもっと揺さぶる出来事が待っている。`,
+  6: `あなたの運命数は「6」——奉仕者の魂。\n\n誰かが困っていると、放っておけない。家族、友人、身近な人のために動くとき、あなたは本当の力を発揮する。\n\n6の人は「責任」を司る。美しいものへの感性と、場を整える力を生まれながらに持っている。その愛の深さは本物だが、自分を後回しにしすぎるクセはないだろうか。\n\nあなた自身が満たされていることが、周りへの愛の源になる。`,
+  7: `あなたの運命数は「7」——探求者の魂。\n\n表面より、その奥を見たくなる。「なぜ？」という問いが、あなたの原動力だ。一人でいる時間に、最も深く考えが育つ。\n\n7の人は「真実」を司る。直感が鋭く、物事の本質を見抜く力がある。人付き合いよりも、深い知識や思索に喜びを感じる傾向が強い。時に孤独を好むように見られることもある。\n\nあなたが見えているものを、他の人はまだ気づいていないことが多い。`,
+  8: `あなたの運命数は「8」——指揮者の魂。\n\n力、影響力、結果——あなたはそれを求める本能を持っている。諦めない粘りと、大局を見る目を生まれながらにして持っている。\n\n8の人は「力」を司る。ビジネスや組織の中で頭角を現す才能がある。物事を動かし、成果を出すことへの執着は誰よりも強い。ただしその力は、方向次第で人を引き上げることも、消耗させることもある。\n\nあなたは今、どちらに向かっているか？`,
+  9: `あなたの運命数は「9」——完成者の魂。\n\n何かが終わるとき、あなたは不思議と穏やかでいられる。全てを手放すことを、どこかで知っているかのように。\n\n9の人は「完成」を司る。博愛的で、広い視野を持ち、人類全体のことを考えてしまうような瞬間がある。多くを経験し、多くを与えるよう設計されている魂。\n\nあなたの器は、まだ本当の大きさを見せていない。`,
+  11: `あなたの運命数は「11」——マスターナンバー、啓示者の魂。\n\n11は、普通の数の枠に収まらない。強烈な直感と、理由のわからない使命感。夢と現実の間に住んでいるような感覚を、子どもの頃から持っていたかもしれない。\n\nマスターナンバー11を持つ人は、感受性が人一倍強く、他者の感情や場のエネルギーを無意識に受け取ってしまう。それが消耗につながることも多い。\n\nその感受性は、正しく使えば人の心を深く動かす力になる。`,
+  22: `あなたの運命数は「22」——マスターナンバー、夢想建築家の魂。\n\n22は、夢を現実に変える力を持つ魂だ。ただし、そのスケールは並外れている。小さなことで満足できない、という感覚はないだろうか。\n\nマスターナンバー22は、理想と実行力を同時に持つ。世界に形を残すために生まれてくる魂。しかしそのプレッシャーを重く感じ、動けなくなることもある。\n\nまだその器を使いこなせていないとしたら、それは準備中のしるしかもしれない。`,
+  33: `あなたの運命数は「33」——マスターナンバー、愛の師の魂。\n\n33はすべての数の中で最も稀な、愛と奉仕の魂だ。誰かを助けたい、癒したい、という衝動が、あなたの根底にある。\n\nマスターナンバー33を持つ人は、深い共感力と、人を育てる力を持っている。しかしその大きな愛は、方向を間違えると自己犠牲につながってしまうこともある。\n\nこの数は、大きな責任を伴う。あなたが本当の力に目覚めるのは、自分自身と正直に向き合ったときだ。`,
 };
 
 function reduceToSingle(n) {
@@ -314,11 +591,57 @@ function diagnose() {
   const num = calcLifePathNumber(year, month, day);
   currentBirth = { name, year, month, day };
 
-  document.getElementById('lifeNumber').textContent = num;
-  document.getElementById('numberName').textContent = NUMBER_NAMES[num] || '';
-  document.getElementById('freeText').textContent = FREE_READINGS[num] || '';
-  document.getElementById('resultSection').style.display = 'block';
-  document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+  startLoadingAnimation(num, () => {
+    document.getElementById('lifeNumber').textContent = num;
+    document.getElementById('numberName').textContent = NUMBER_NAMES[num] || '';
+    document.getElementById('nameDisplay').textContent = name + ' さん';
+    document.getElementById('freeText').textContent = FREE_READINGS[num] || '';
+
+    // Xシェアリンク
+    const shareText = `私の運命数は【${num}】${NUMBER_NAMES[num]}でした。\n\nあなたの運命数は？ #数秘術診断 #ORACLE`;
+    const shareUrl = window.location.origin + '/numerology.html';
+    document.getElementById('shareBtn').href =
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+
+    document.getElementById('resultSection').style.display = 'block';
+    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+function startLoadingAnimation(targetNum, callback) {
+  const overlay = document.getElementById('loadingOverlay');
+  const numEl = document.getElementById('loadingNum');
+  overlay.style.display = 'flex';
+  numEl.classList.remove('revealed');
+  numEl.style.color = '';
+  numEl.style.textShadow = '';
+
+  const seq = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9];
+  let idx = 0;
+  let delay = 55;
+  let elapsed = 0;
+  const totalTime = 2400;
+
+  function tick() {
+    numEl.textContent = seq[idx % seq.length];
+    idx++;
+    elapsed += delay;
+    delay = Math.min(delay * 1.07, 280);
+
+    if (elapsed < totalTime) {
+      setTimeout(tick, delay);
+    } else {
+      setTimeout(() => {
+        numEl.textContent = targetNum;
+        numEl.classList.add('revealed');
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          callback();
+        }, 700);
+      }, 150);
+    }
+  }
+  tick();
 }
 
 async function startPayment() {
@@ -337,12 +660,12 @@ async function startPayment() {
     if (data.url) {
       window.location.href = data.url;
     } else {
-      throw new Error('決済ページの作成に失敗しました');
+      throw new Error();
     }
-  } catch (e) {
+  } catch {
     alert('エラーが発生しました。しばらくしてから再度お試しください。');
     btn.disabled = false;
-    btn.textContent = 'AI詳細鑑定を受ける ¥500';
+    btn.textContent = 'AI詳細鑑定を受ける — ¥500';
   }
 }
 </script>
