@@ -9,6 +9,15 @@
     /* 数秘術ページ：占星術サイトと色調を分ける（暖色系アンバー） */
     body { background: #0b0804 !important; }
 
+    /* フォームをヒーロー直後に表示するためflexで順序制御 */
+    #page-wrapper { display: flex; flex-direction: column; }
+    .n-hero        { order: 1; }
+    .n-form-section { order: 2; }
+    .n-result      { order: 3; }
+    .about-section { order: 4; }
+    .compare-section { order: 5; }
+    .numbers-section { order: 6; }
+
     /* ── ローディングオーバーレイ ── */
     #loadingOverlay {
       position: fixed; inset: 0;
@@ -62,13 +71,13 @@
       font-size: 10px; letter-spacing: 5px; padding: 4px 18px; margin-bottom: 28px;
     }
     .n-hero h1 {
-      font-size: clamp(26px, 5vw, 46px); font-weight: 300; letter-spacing: 4px;
-      color: #f0e6c8; margin-bottom: 20px; line-height: 1.5;
+      font-size: clamp(24px, 5vw, 44px); font-weight: 300; letter-spacing: 4px;
+      color: #f0e6c8; margin-bottom: 20px; line-height: 1.6;
     }
-    .n-hero h1 em { color: #c9a84c; font-style: normal; }
+    .n-hero h1 em { color: #c9a84c; font-style: normal; display: block; }
     .n-hero p {
       color: #8888aa; font-size: 15px; line-height: 2.1;
-      max-width: 520px; margin: 0 auto;
+      max-width: 480px; margin: 0 auto;
     }
 
     /* ── 数秘術とは ── */
@@ -321,6 +330,8 @@
   <a href="index.html">← ORACLE 本格西洋占星術鑑定</a>
 </div>
 
+<div id="page-wrapper">
+
 <!-- ヒーロー -->
 <div class="n-hero">
   <!-- Seed of Life 背景SVG -->
@@ -336,8 +347,8 @@
   </svg>
 
   <div class="badge">NUMEROLOGY FREE READING</div>
-  <h1>生年月日が語る、<br><em>あなたの運命数。</em></h1>
-  <p>数秘術（ニューメロロジー）は、生年月日に秘められた数字から<br>あなたの魂の性質・人生のテーマ・才能と課題を読み解く占術。<br>名前と生年月日だけで、今すぐ無料診断できます。</p>
+  <h1>生年月日が語る、<em>あなたの運命数。</em></h1>
+  <p>数秘術（ニューメロロジー）は、生年月日に秘められた数字からあなたの魂の性質・人生のテーマ・才能と課題を読み解く占術。名前と生年月日だけで、今すぐ無料診断できます。</p>
 </div>
 
 <!-- 数秘術とは -->
@@ -621,6 +632,8 @@
 
   </div>
 </div>
+
+</div><!-- /page-wrapper -->
 
 <div class="bottom-nav">
   <a href="index.html">ORACLE — プレミアム西洋占星術鑑定</a>
