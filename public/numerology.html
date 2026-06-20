@@ -6,6 +6,9 @@
   <title>数秘術 無料診断 — 生年月日で読み解く運命数 | ORACLE</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* 数秘術ページ：占星術サイトと色調を分ける（暖色系アンバー） */
+    body { background: #0b0804 !important; }
+
     /* ── ローディングオーバーレイ ── */
     #loadingOverlay {
       position: fixed; inset: 0;
@@ -45,7 +48,7 @@
     .n-hero {
       text-align: center;
       padding: 72px 20px 64px;
-      background: radial-gradient(ellipse at 50% 60%, #1a1508 0%, #100e08 70%);
+      background: radial-gradient(ellipse at 50% 50%, #2a1806 0%, #0b0804 70%);
       position: relative; overflow: hidden;
     }
     .n-hero::before {
@@ -320,6 +323,18 @@
 
 <!-- ヒーロー -->
 <div class="n-hero">
+  <!-- Seed of Life 背景SVG -->
+  <svg viewBox="0 0 300 300" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(420px,90vw);opacity:0.10;pointer-events:none;" aria-hidden="true">
+    <circle cx="150" cy="150" r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="230" cy="150" r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="190" cy="81"  r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="110" cy="81"  r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="70"  cy="150" r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="110" cy="219" r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="190" cy="219" r="80" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="150" cy="150" r="160" fill="none" stroke="#c9a84c" stroke-width="0.6" opacity="0.5"/>
+  </svg>
+
   <div class="badge">NUMEROLOGY FREE READING</div>
   <h1>生年月日が語る、<br><em>あなたの運命数。</em></h1>
   <p>数秘術（ニューメロロジー）は、生年月日に秘められた数字から<br>あなたの魂の性質・人生のテーマ・才能と課題を読み解く占術。<br>名前と生年月日だけで、今すぐ無料診断できます。</p>
@@ -331,6 +346,40 @@
   <h2>数秘術とは？</h2>
   <p>数秘術（ニューメロロジー）は、古代ギリシャの哲学者ピタゴラスが体系化したとされる占術です。生年月日に含まれる数字を一定のルールで縮約し「運命数（ライフパスナンバー）」を導き出します。</p>
   <p>運命数は1〜9の数字（＋特別な力を持つマスターナンバー11・22・33）の12種類。それぞれに固有の意味があり、あなたが生まれながらに持つ魂の傾向、人生で繰り返し直面するテーマ、そして開花させるべき才能を示します。</p>
+
+  <!-- 計算フロー図 -->
+  <div style="margin:40px 0;padding:32px 24px;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.15);border-radius:4px;">
+    <div style="font-size:11px;letter-spacing:4px;color:#c9a84c;margin-bottom:20px;">HOW IT WORKS — 計算方法</div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:center;font-size:14px;color:#9999bb;line-height:2;">
+      <div style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:2px;color:#666688;margin-bottom:8px;">生年月日</div>
+        <div style="display:flex;gap:4px;align-items:center;">
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">1</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">9</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">9</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">0</span>
+          <span style="color:#555577;padding:0 4px;">/</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">0</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">5</span>
+          <span style="color:#555577;padding:0 4px;">/</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">1</span>
+          <span style="display:inline-block;width:28px;height:32px;line-height:32px;text-align:center;border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:16px;font-weight:300;">5</span>
+        </div>
+      </div>
+      <div style="font-size:20px;color:#c9a84c;opacity:0.5;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:2px;color:#666688;margin-bottom:8px;">全数字を合計</div>
+        <div style="color:#c9a84c;font-size:15px;font-weight:300;">1+9+9+0+0+5+1+5 = <strong style="font-size:22px;">30</strong></div>
+      </div>
+      <div style="font-size:20px;color:#c9a84c;opacity:0.5;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:11px;letter-spacing:2px;color:#666688;margin-bottom:8px;">さらに縮約</div>
+        <div style="color:#c9a84c;font-size:15px;font-weight:300;">3+0 = <strong style="font-size:30px;text-shadow:0 0 20px rgba(201,168,76,0.4);">3</strong></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:#555577;letter-spacing:2px;">これが「運命数」</div>
+  </div>
+
   <div class="about-grid">
     <div class="about-card">
       <div class="icon" style="font-size:18px;font-weight:300;color:#c9a84c;letter-spacing:2px;">Ⅰ</div>
@@ -407,6 +456,47 @@
   <div class="section-label">LIFE PATH NUMBERS</div>
   <h2>12の運命数</h2>
   <div class="sub">あなたはどの数字？診断してみよう</div>
+
+  <!-- 数秘術ホイール -->
+  <div style="text-align:center;margin:40px auto 48px;">
+    <svg viewBox="0 0 300 300" style="width:min(280px,75vw);" aria-hidden="true">
+      <circle cx="150" cy="150" r="128" fill="none" stroke="#c9a84c" stroke-width="0.6" opacity="0.2"/>
+      <circle cx="150" cy="150" r="110" fill="none" stroke="#c9a84c" stroke-width="0.3" opacity="0.12"/>
+      <line x1="150" y1="150" x2="150" y2="28"  stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="221" y2="66"  stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="258" y2="131" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="245" y2="205" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="188" y2="253" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="112" y2="253" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="55"  y2="205" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="42"  y2="131" stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <line x1="150" y1="150" x2="79"  y2="66"  stroke="#c9a84c" stroke-width="0.4" opacity="0.15"/>
+      <polygon points="150,28 221,66 258,131 245,205 188,253 112,253 55,205 42,131 79,66"
+        fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.18"/>
+      <circle cx="150" cy="28"  r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="221" cy="66"  r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="258" cy="131" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="245" cy="205" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="188" cy="253" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="112" cy="253" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="55"  cy="205" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="42"  cy="131" r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="79"  cy="66"  r="18" fill="#0b0804" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+      <text x="150" y="28"  text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">1</text>
+      <text x="221" y="66"  text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">2</text>
+      <text x="258" y="131" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">3</text>
+      <text x="245" y="205" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">4</text>
+      <text x="188" y="253" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">5</text>
+      <text x="112" y="253" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">6</text>
+      <text x="55"  y="205" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">7</text>
+      <text x="42"  y="131" text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">8</text>
+      <text x="79"  y="66"  text-anchor="middle" dominant-baseline="middle" fill="#c9a84c" font-size="15" font-family="serif">9</text>
+      <circle cx="150" cy="150" r="5" fill="#c9a84c" opacity="0.5"/>
+      <circle cx="150" cy="150" r="24" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
+    </svg>
+    <div style="font-size:11px;letter-spacing:3px;color:#555577;margin-top:8px;">PYTHAGOREAN WHEEL</div>
+  </div>
+
   <div class="num-grid">
     <div class="num-card"><div class="n">1</div><div class="k">開拓者</div></div>
     <div class="num-card"><div class="n">2</div><div class="k">調停者</div></div>
