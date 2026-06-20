@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数秘術 AI鑑定 | ORACLE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .nresult-header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nresult-header .badge {
+      display: inline-block;
+      border: 1px solid #c9a84c;
+      color: #c9a84c;
+      font-size: 11px;
+      letter-spacing: 3px;
+      padding: 4px 16px;
+      margin-bottom: 20px;
+    }
+    .nresult-header h1 {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .nresult-header .client-name {
+      font-size: 24px;
+      color: #f0e6c8;
+      font-weight: 300;
+      letter-spacing: 4px;
+    }
+    .number-hero {
+      text-align: center;
+      padding: 48px 20px;
+      background: linear-gradient(135deg, #12121f, #1a1a2e);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .number-hero .big-num {
+      font-size: 96px;
+      font-weight: 200;
+      color: #c9a84c;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .number-hero .num-label {
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #8888aa;
+    }
+    .number-hero .num-name {
+      font-size: 22px;
+      letter-spacing: 6px;
+      color: #f0e6c8;
+      font-weight: 300;
+      margin-top: 4px;
+    }
+    .reading-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+      line-height: 2.2;
+      color: #ccc;
+      font-size: 15.5px;
+    }
+    .reading-body p { margin-bottom: 1.8em; }
+    .reading-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: #c9a84c;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .loading-msg {
+      text-align: center;
+      color: #555577;
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 80px 20px;
+    }
+    .oracle-upgrade {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .oracle-upgrade-box {
+      border: 1px solid rgba(201,168,76,0.4);
+      background: linear-gradient(135deg, #0e0e1a, #16162a);
+      border-radius: 4px;
+      padding: 48px 32px;
+      text-align: center;
+    }
+    .oracle-upgrade-box h3 {
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #f0e6c8;
+      margin-bottom: 16px;
+    }
+    .oracle-upgrade-box p {
+      color: #8888aa;
+      font-size: 14px;
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+    .oracle-upgrade-box a {
+      display: inline-block;
+      background: linear-gradient(135deg, #c9a84c, #a07830);
+      color: #0a0a14;
+      text-decoration: none;
+      padding: 16px 40px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      border-radius: 2px;
+      transition: opacity 0.3s;
+    }
+    .oracle-upgrade-box a:hover { opacity: 0.85; }
+    .print-btn {
+      display: block;
+      margin: 0 auto 40px;
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.4);
+      color: #c9a84c;
+      padding: 12px 32px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .print-btn:hover { background: rgba(201,168,76,0.1); }
+    .nav-back {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-back a { color: #555577; font-size: 12px; letter-spacing: 2px; text-decoration: none; }
+    .nav-back a:hover { color: #c9a84c; }
+    @media print {
+      .print-btn, .oracle-upgrade, .nav-back { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nresult-header">
+  <div class="badge">NUMEROLOGY READING</div>
+  <h1>数秘術 AI鑑定</h1>
+  <div class="client-name" id="clientName">—</div>
+</div>
+
+<div class="number-hero" id="numberHero" style="display:none;">
+  <div class="num-label">LIFE PATH NUMBER</div>
+  <div class="big-num" id="lifeNum">—</div>
+  <div class="num-name" id="numName">—</div>
+</div>
+
+<div class="reading-body">
+  <div class="loading-msg" id="loadingMsg">鑑定文を生成中です。しばらくお待ちください...</div>
+  <div id="readingText" style="display:none;"></div>
+</div>
+
+<div class="oracle-upgrade" id="upgradeSection" style="display:none;">
+  <button class="print-btn" onclick="window.print()">鑑定書を印刷・保存する</button>
+  <div class="oracle-upgrade-box">
+    <h3>さらに深く知りたい方へ</h3>
+    <p>数秘術は生年月日から導く入口。<br>出生時刻・出生地・天体配置まで読み解く西洋占星術で、<br>あなたの人生を全6章・約12,000字で鑑定します。</p>
+    <a href="index.html">ORACLE 本格鑑定を見る</a>
+  </div>
+</div>
+
+<div class="nav-back">
+  <a href="numerology.html">← 数秘術診断に戻る</a>
+</div>
+
+<script>
+const NUMBER_NAMES = {
+  1:'開拓者', 2:'調停者', 3:'表現者', 4:'建設者', 5:'冒険者',
+  6:'奉仕者', 7:'探求者', 8:'指揮者', 9:'完成者',
+  11:'啓示者', 22:'夢想建築家', 33:'愛の師',
+};
+
+const params = new URLSearchParams(location.search);
+const sessionId = params.get('session_id');
+
+if (!sessionId) {
+  document.getElementById('loadingMsg').textContent = 'セッションIDが見つかりません。';
+} else {
+  startStream();
+}
+
+function startStream() {
+  const readingEl = document.getElementById('readingText');
+  const loadingEl = document.getElementById('loadingMsg');
+  let buffer = '';
+  let cursor = null;
+
+  const es = new EventSource(`/api/numerology-generate?session_id=${sessionId}`);
+
+  es.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+
+    if (data.type === 'meta') {
+      const birth = data.birth || {};
+      document.getElementById('clientName').textContent = (birth.name || '') + ' 様';
+      document.getElementById('lifeNum').textContent = data.lifePathNumber;
+      document.getElementById('numName').textContent = NUMBER_NAMES[data.lifePathNumber] || '';
+      document.getElementById('numberHero').style.display = 'block';
+      loadingEl.style.display = 'none';
+      readingEl.style.display = 'block';
+      cursor = document.createElement('span');
+      cursor.className = 'reading-cursor';
+      readingEl.appendChild(cursor);
+    }
+
+    if (data.type === 'text') {
+      buffer += data.text;
+      const paragraphs = buffer.split('\n\n');
+      readingEl.innerHTML = '';
+      paragraphs.forEach((p, i) => {
+        if (!p.trim()) return;
+        const el = document.createElement('p');
+        el.textContent = p;
+        readingEl.appendChild(el);
+      });
+      if (cursor) {
+        cursor = document.createElement('span');
+        cursor.className = 'reading-cursor';
+        readingEl.lastChild ? readingEl.lastChild.appendChild(cursor) : readingEl.appendChild(cursor);
+      }
+    }
+
+    if (data.type === 'done') {
+      if (cursor) cursor.remove();
+      document.getElementById('upgradeSection').style.display = 'block';
+      es.close();
+    }
+
+    if (data.type === 'error') {
+      loadingEl.textContent = 'エラーが発生しました: ' + data.message;
+      loadingEl.style.display = 'block';
+      es.close();
+    }
+  };
+
+  es.onerror = () => {
+    loadingEl.textContent = '接続エラーが発生しました。ページを再読み込みしてお試しください。';
+    loadingEl.style.display = 'block';
+    es.close();
+  };
+}
+</script>
+
+</body>
+</html>

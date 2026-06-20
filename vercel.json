@@ -6,10 +6,16 @@
     "api/generate.js": {
       "maxDuration": 60
     },
+    "api/numerology-generate.js": {
+      "maxDuration": 60
+    },
     "api/webhook.js": {
       "maxDuration": 30
     },
     "api/create-session.js": {
+      "maxDuration": 30
+    },
+    "api/create-numerology-session.js": {
       "maxDuration": 30
     }
   }
